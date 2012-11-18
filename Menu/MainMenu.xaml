@@ -1,0 +1,91 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	mc:Ignorable="d"
+    Loaded="WindowLoaded"
+	x:Class="Imgu.Menu.MainMenu"
+	d:DesignWidth="800" d:DesignHeight="600">
+
+
+    <UserControl.Resources>
+        <ItemsPanelTemplate x:Key="ImageGalleryItemsPanelTemplate">
+
+            <!--Display Images on UniformGrid Panel-->
+            <UniformGrid Columns="4" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="ImageGalleryDataTemplate">
+            <Grid>
+                <Border BorderBrush="#FFFF9800" BorderThickness="3"  Width="120" Height="120" Padding="10" Margin="15" CornerRadius="10">
+                    <!--Bind Image Path in Image Control-->
+                    <Image Source="{Binding FullImagePath}" Stretch="Fill"  HorizontalAlignment="Center">
+                        <!--View Large Image on Image Control Tooltip-->
+                        <Image.ToolTip>
+                            <Grid>
+                                <Image Source="{Binding FullImagePath}" Stretch="Fill" HorizontalAlignment="Center" Height="200" Width="200"></Image>
+                            </Grid>
+                        </Image.ToolTip>
+
+                    </Image>
+
+                </Border>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+        <Grid x:Name="mainMenuLayoutRoot">
+		<Button x:Name="loadGameButton" Height="40" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Bottom" Width="200" FontSize="21.333" Content="File size manager" Click="optionsButton_Click"/>
+
+        <ListBox Height="370" Margin="435,129,137,0" Name="listBoxChosenFiles" VerticalAlignment="Top" HorizontalContentAlignment="Left" Drop="ListBoxChosenFilesDrop" AllowDrop="True" Background="#51FFFFFF" Foreground="Black" BorderBrush="{x:Null}" />
+
+
+        <ListBox x:Name="LsImageGallery" ItemTemplate="{DynamicResource ImageGalleryDataTemplate}"   ItemsSource="{Binding}" Width="350" Height="200" HorizontalAlignment="Left" ItemsPanel="{DynamicResource ImageGalleryItemsPanelTemplate}">
+            <ListBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FF1E2A2F" Offset="1"/>
+                </LinearGradientBrush>
+            </ListBox.Background>
+        </ListBox>
+
+        <Button Height="42" HorizontalAlignment="Left" Name="ChooseFiles" VerticalAlignment="Top" Width="41" Click="ChooseFilesClick" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Margin="0,23,0,0">
+            <Button.Background>
+                <ImageBrush ImageSource="/Imgu;component/Images/Pictures-icon.png" />
+            </Button.Background>
+        </Button>
+        <Button Cursor="Hand" Height="42" HorizontalAlignment="Left" Margin="90,23,0,0" Name="buttonChooseFolder" Style="{StaticResource MyButtonStyle}" VerticalAlignment="Top" Width="34" Click="ButtonChooseFolderClick">
+            <Button.Background>
+                <ImageBrush ImageSource="/Imgu;component/Images/Add-Folder-icon.png" />
+            </Button.Background>
+        </Button>
+        <Button Height="99" HorizontalAlignment="Left" Margin="251,23,0,0" Name="Move" VerticalAlignment="Top" Width="99" Click="MoveClick" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Focusable="True">
+            <Button.Background>
+                <ImageBrush ImageSource="/Imgu;component/Images/tick.png" />
+            </Button.Background>
+        </Button>
+        <Button Height="46" HorizontalAlignment="Left" Margin="581,0,0,0" Name="buttonSettings" VerticalAlignment="Top" Width="46" Cursor="Hand" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="optionButton_Click" Style="{StaticResource MyButtonStyle}">
+            <Button.Background>
+                <ImageBrush ImageSource="/Imgu;component/Images/settings-alt-glow-icon.png" />
+            </Button.Background>
+        </Button>
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="275,2,0,0" Name="textBlock1" Text="Sortera" VerticalAlignment="Top" Foreground="White" FontSize="14" />
+        <TextBlock FontSize="14" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="0,8,0,0" Name="textBlock2" Text="Välj filer" VerticalAlignment="Top" />
+        <TextBlock FontSize="14" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="77,8,0,0" Name="textBlock3" Text="Välj mapp" VerticalAlignment="Top" />
+        <StackPanel Height="65" HorizontalAlignment="Left" Margin="363,0,0,0" Name="stackPanel1" VerticalAlignment="Top" Width="220">
+            <TextBlock Name="textBlockCounter" Text="1555/1555" Foreground="White" FontSize="28" />
+            <Label Content="labelCopyingStatus" Name="labelCopyingStatus" Foreground="White" />
+        </StackPanel>
+        <Expander Header="Visa skapade mappar" Name="expanderShowFolder" Width="200" Foreground="White" Expanded="ExpanderShowFolderExpanded" Collapsed="ExpanderShowFolderCollapsed" Margin="586,107,14,123" HorizontalAlignment="Center" HorizontalContentAlignment="Stretch" Height="370" BorderBrush="{x:Null}" BorderThickness="0">
+            <ListBox AllowDrop="True" HorizontalContentAlignment="Left" Name="listBoxCreatedFolders" Background="#2EFFFFFF"/>
+        </Expander>
+        <Grid.Background>
+            <ImageBrush />
+        </Grid.Background>
+    </Grid>
+    <UserControl.Background>
+        <ImageBrush ImageSource="/Imgu;component/Images/Sandpaper2.png" />
+    </UserControl.Background>
+
+</UserControl>
