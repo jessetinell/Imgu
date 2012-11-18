@@ -1,4 +1,7 @@
-﻿namespace Imgu
+﻿using System;
+using System.Globalization;
+
+namespace Imgu
 {
     public static class ExtensionMethods
     {

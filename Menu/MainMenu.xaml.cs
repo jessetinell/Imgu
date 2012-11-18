@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows;
-using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Imgu.Properties;
@@ -15,7 +14,7 @@ using System.Linq;
 
 namespace Imgu.Menu
 {
-	public partial class MainMenu : System.Windows.Controls.UserControl, ISwitchable
+	public partial class MainMenu : ISwitchable
 	{
 		public MainMenu()
 		{
@@ -31,14 +30,14 @@ namespace Imgu.Menu
         }
         #endregion
 
-		private void optionsButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void FileSizeManagerButtonClick(object sender, RoutedEventArgs e)
 		{
-			Switcher.Switch(new LoadGame());
+            Switcher.Switch(new FileSizeManager());
 		}
 
-		private void optionButton_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void SettingsButtonClick(object sender, RoutedEventArgs e)
 		{
-			Switcher.Switch(new Option());
+            Switcher.Switch(new AppSettings());
 		}
 
 
@@ -72,7 +71,7 @@ namespace Imgu.Menu
                 openSettings();
             }
             CountUploadedFiles(Current = 0, true, "");
-            listBoxChosenFiles.DataContext = _theImages;
+            listBoxChosenFiles.DataContext = _theImages.OrderBy(f => f.DateTaken);
         }
         #endregion
 
@@ -85,13 +84,13 @@ namespace Imgu.Menu
             if (imageFormats.Contains(format))
             {
                 CreateImageObject(file, filename);
-                listBoxChosenFiles.Items.Add(file);
+                //listBoxChosenFiles.Items.Add(file);
                 CountUploadedFiles(++Current, false, "");
             }
             else if (videoFormats.Contains(format))
             {
                 CreateFileObject(file);
-                listBoxChosenFiles.Items.Add(file);
+                //listBoxChosenFiles.Items.Add(file);
                 CountUploadedFiles(++Current, false, "");
             }
             else
@@ -159,7 +158,8 @@ namespace Imgu.Menu
             }
             _theImages.Clear();
             Current = 0;
-            listBoxChosenFiles.Items.Clear();
+            _theImages.Clear();
+            listBoxChosenFiles.ItemsSource = _theImages;
             labelCopyingStatus.Content = "";
         }
         #endregion
@@ -176,10 +176,8 @@ namespace Imgu.Menu
             }
             else
             {
-                //var sp = new SettingsPage();
-                //sp.Show();
+                Switcher.Switch(new AppSettings());
             }
-            expanderShowFolder.IsExpanded = Settings.Default.ShowCreatedFolderExpander;
         }
 
         #endregion
@@ -228,7 +226,6 @@ namespace Imgu.Menu
             {
                 Directory.CreateDirectory(targetYear);
                 _sfi.setFolderIcon(targetYear, 43);
-                CreatedFolder(DateTime.Now.Year.ToString(CultureInfo.InvariantCulture));
             }
 
             //om MÅNAD inte finns
@@ -236,14 +233,12 @@ namespace Imgu.Menu
             {
                 Directory.CreateDirectory(targetMonth);
                 _sfi.setFolderIcon(targetMonth, 0);
-                CreatedFolder(monthNumber + ". " + month);
             }
 
             //om WHATEVA-mappen inte finns
             if (!Directory.Exists(whatEver))
             {
                 Directory.CreateDirectory(whatEver);
-                CreatedFolder(NoDataFolder);
             }
 
             //Om dag finns, kopiera in fil
@@ -282,7 +277,6 @@ namespace Imgu.Menu
             {
                 Directory.CreateDirectory(targetYear);
                 _sfi.setFolderIcon(targetYear, 43);
-                CreatedFolder(file.DateTaken.Year.ToString(CultureInfo.InvariantCulture));
             }
 
             //om MÅNAD inte finns
@@ -290,14 +284,12 @@ namespace Imgu.Menu
             {
                 Directory.CreateDirectory(targetMonth);
                 _sfi.setFolderIcon(targetMonth, 0);
-                CreatedFolder(monthNumber + ". " + month);
             }
 
             //om DAG inte finns, skapa mappen
             if (!Directory.Exists(targetDay))
             {
                 Directory.CreateDirectory(targetDay);
-                CreatedFolder(day);
             }
 
             //Om dag finns, kopiera in fil
@@ -307,10 +299,6 @@ namespace Imgu.Menu
                 if (file.FileName != null) targetDay = Path.Combine(targetDay, file.FileName);
                 File.Copy(file.FullImagePath, targetDay, true);
             }
-        }
-        void CreatedFolder(string folder)
-        {
-            listBoxCreatedFolders.Items.Add(folder);
         }
         void ShowProblemFiles(string file)
         {
@@ -335,11 +323,10 @@ namespace Imgu.Menu
             {
                 openSettings();
             }
+            listBoxChosenFiles.ItemsSource = _theImages.OrderBy(f => f.DateTaken);
         }
         void SortFolder(string root)
         {
-            // Data structure to hold names of subfolders to be
-            // examined for files.
             var dirs = new Stack<string>();
 
             dirs.Push(root);
@@ -405,28 +392,14 @@ namespace Imgu.Menu
                     }
                     if (droppedFilePaths != null) Array.Clear(droppedFilePaths, 0, droppedFilePaths.Length);
                     CountUploadedFiles(Current = 0, true, "");
-                    LsImageGallery.DataContext = _theImages.OrderBy(f=>f.DateTaken);
+                    listBoxChosenFiles.DataContext = _theImages.OrderBy(f=>f.DateTaken);
                 }
                 else
                 {
-                    openSettings();
+                    Switcher.Switch(new AppSettings());
                 }
             }
         }
         #endregion
-
-        #region Expander for showing created folders
-        private void ExpanderShowFolderExpanded(object sender, RoutedEventArgs e)
-        {
-            Settings.Default.ShowCreatedFolderExpander = true;
-            Settings.Default.Save();
-        }
-        private void ExpanderShowFolderCollapsed(object sender, RoutedEventArgs e)
-        {
-            Settings.Default.ShowCreatedFolderExpander = false;
-            Settings.Default.Save();
-        }
-        #endregion
-		
 	}
 }

@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using Imgu.Properties;
 using MainMenu = Imgu.Menu.MainMenu;
-using UserControl = System.Windows.Controls.UserControl;
 
 namespace Imgu
 {
-	public partial class Option : UserControl, ISwitchable
+	public partial class AppSettings : ISwitchable
 	{
-		public Option()
+		public AppSettings()
 		{
 			// Required to initialize variables
 			InitializeComponent();

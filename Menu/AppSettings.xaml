@@ -4,10 +4,10 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	x:Class="Imgu.Option"
-	d:DesignWidth="640" d:DesignHeight="480" Width="800" Height="600" Background="{Binding}">
+	x:Class="Imgu.AppSettings"
+	d:DesignWidth="640">
 
-    <Grid Background="#FFC4C4C4" Height="322" Width="634">
+    <Grid Background="#FFC4C4C4">
         <TextBlock Height="40" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="200" Text="Load Game" TextWrapping="Wrap" FontSize="21.333"/>
         <Button Height="25" HorizontalAlignment="Right" Margin="0,0,20,20" VerticalAlignment="Bottom" Width="100" Content="&lt; Back" Click="Button_Click"/>
         <Button Height="50" HorizontalAlignment="Left" Margin="13,31,0,0" Name="buttonSelectFolder" VerticalAlignment="Top" Width="46" Click="ButtonSelectFolderClick">
@@ -27,7 +27,7 @@
             </Button.Background>
         </Button>
         <TextBlock Height="23" HorizontalAlignment="Left" Margin="64,129,0,0" Name="textBlockMonthIcon" Text="Aktuell mapp" VerticalAlignment="Top" />
-        <Rectangle Height="168" HorizontalAlignment="Left" Margin="435,12,0,0" Name="rectangle1" VerticalAlignment="Top" Width="187" Fill="#FFE2E2E2">
+        <Rectangle Height="168" HorizontalAlignment="Left" Margin="435,12,0,0" Name="rectangle1" VerticalAlignment="Top" Width="287" Fill="#FFE2E2E2">
             <Rectangle.Stroke>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF6F6F6F" Offset="0" />
