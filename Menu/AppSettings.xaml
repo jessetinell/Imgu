@@ -5,42 +5,73 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
 	x:Class="Imgu.AppSettings"
-	d:DesignWidth="640">
+	d:DesignWidth="816" d:DesignHeight="938" Padding="5">
 
-    <Grid Background="#FFC4C4C4">
-        <TextBlock Height="40" HorizontalAlignment="Left" Margin="20,20,0,0" VerticalAlignment="Top" Width="200" Text="Load Game" TextWrapping="Wrap" FontSize="21.333"/>
-        <Button Height="25" HorizontalAlignment="Right" Margin="0,0,20,20" VerticalAlignment="Bottom" Width="100" Content="&lt; Back" Click="Button_Click"/>
-        <Button Height="50" HorizontalAlignment="Left" Margin="13,31,0,0" Name="buttonSelectFolder" VerticalAlignment="Top" Width="46" Click="ButtonSelectFolderClick">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/Developer-Purple-Folder-icon.png" />
-            </Button.Background>
-        </Button>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="11,12,0,0" Name="textBlock1" Text="Huvudmappen alla bilder sparas i" VerticalAlignment="Top" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="11,190,0,0" Name="textBlock2" Text="Namn på mappen där filer utan datum hamnar" VerticalAlignment="Top" />
-        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,209,0,0" Name="textBoxNoDataFolder" VerticalAlignment="Top" Width="257" />
-        <Button Content="Spara" Height="56" HorizontalAlignment="Left" Margin="12,256,0,0" Name="buttonSave" VerticalAlignment="Top" Width="305" Click="ButtonSaveClick" FontSize="28" FontWeight="Bold" FontStyle="Normal" FontStretch="SemiExpanded" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="64,41,0,0" Name="textBlockTargetFolder" Text="Aktuell mapp" VerticalAlignment="Top" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="12,100,0,0" Name="textBlock3" Text="Ikon för månadsmappen" VerticalAlignment="Top" />
-        <Button Height="50" HorizontalAlignment="Left" Margin="12,119,0,0" Name="buttonSelectMonthIcon" VerticalAlignment="Top" Width="46" Click="ButtonSelectMonthIconClick">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/Gallery.ico" />
-            </Button.Background>
-        </Button>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="64,129,0,0" Name="textBlockMonthIcon" Text="Aktuell mapp" VerticalAlignment="Top" />
-        <Rectangle Height="168" HorizontalAlignment="Left" Margin="435,12,0,0" Name="rectangle1" VerticalAlignment="Top" Width="287" Fill="#FFE2E2E2">
-            <Rectangle.Stroke>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF6F6F6F" Offset="0" />
-                    <GradientStop Color="#FFDBDBDB" Offset="1" />
-                </LinearGradientBrush>
-            </Rectangle.Stroke>
-        </Rectangle>
-        <TextBlock Margin="436,12,12,142" TextWrapping="Wrap">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,20" Width="100" Content="&lt;- Tillbaka" Click="ButtonBackClick"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Huvudmappen alla bilder sparas i" Margin="0,0,0,5"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource OpacityHover}" Height="50" HorizontalAlignment="Left" Name="buttonSelectFolder" VerticalAlignment="Top" Width="46" Click="ButtonSelectFolderClick">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Imgu;component/Images/Developer-Purple-Folder-icon.png" />
+                    </Button.Background>
+                </Button>
+                    <TextBlock Name="textBlockTargetFolder" Margin="5,0,0,0" Text="Aktuell mapp" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <TextBlock HorizontalAlignment="Left" Name="textBlock3" Margin="0,20,0,5" Text="Ikon för månadsmappen" VerticalAlignment="Top" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource OpacityHover}" Height="50" HorizontalAlignment="Left" Name="buttonSelectMonthIcon" VerticalAlignment="Top" Width="46" Click="ButtonSelectMonthIconClick">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Imgu;component/Images/Gallery.ico" />
+                        </Button.Background>
+                    </Button>
+                    <TextBlock Margin="5,0,0,0" Name="textBlockMonthIcon" Text="Aktuell fil" VerticalAlignment="Center" />
+                </StackPanel>
+                
+                <TextBlock Text="Namn på mappen där filer utan datum hamnar" Margin="0,20,0,5"/>
+                <TextBox Name="textBoxNoDataFolder" Width="257" HorizontalAlignment="Left" />
+
+            </StackPanel>
+            
+            <Grid Grid.Column="1">
+             <TextBlock HorizontalAlignment="Right">
             Filformat som stöds:<LineBreak/>
             -Bilder<LineBreak/>
             -- jpg, gif, png, bmp<LineBreak/><LineBreak/>
             -Filmer<LineBreak/>
             -- avi, 3gp, mov, mp4, mpg, mkv, wmv, rm, vob, amr
-        </TextBlock>
+                </TextBlock>
+            </Grid>
+        </Grid>
+        
+        <Button Content="Spara" Grid.Row="2" HorizontalAlignment="Center" Name="buttonSave" Padding="20,0" Click="ButtonSaveClick" FontSize="28"/>
+        
     </Grid>
+    <UserControl.Background>
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF303030" Offset="1"/>
+            <GradientStop Color="#FF1F1F1F" Offset="0.162"/>
+        </LinearGradientBrush>
+    </UserControl.Background>
+    <UserControl.Resources>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Control.Foreground" Value="White"></Setter>
+        </Style>
+    </UserControl.Resources>
+
 </UserControl>

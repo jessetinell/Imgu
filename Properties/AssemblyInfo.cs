@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Imgu")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Sorterar bilder")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Imgu AB")]
+[assembly: AssemblyCompany("Imgu")]
 [assembly: AssemblyProduct("Imgu")]
 [assembly: AssemblyCopyright("Copyright ©  2012")]
 [assembly: AssemblyTrademark("")]

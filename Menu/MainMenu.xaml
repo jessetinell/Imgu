@@ -3,21 +3,19 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:vc="clr-namespace:Imgu"
-	mc:Ignorable="d"
+    xmlns:local="clr-namespace:Imgu" mc:Ignorable="d"
     Loaded="WindowLoaded"
 	x:Class="Imgu.Menu.MainMenu"
-	d:DesignWidth="800" d:DesignHeight="600">
+	d:DesignWidth="816" d:DesignHeight="938" >
 
 
     <UserControl.Resources>
-        <vc:FormatTime x:Key="TimeFormat"/>
+        <local:FormatTime x:Key="TimeFormat"/>
         <ItemsPanelTemplate x:Key="ImageGalleryItemsPanelTemplate">
             <UniformGrid Columns="1"/>
         </ItemsPanelTemplate>
         <DataTemplate x:Key="ImageGalleryDataTemplate">
             <Grid Width="600">
-                    <!--Bind Image Path in Image Control-->
                 <TextBlock Foreground="White">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}">
@@ -25,13 +23,11 @@
 
                         </MultiBinding>
                     </TextBlock.Text>
-                        <!--View Large Image on Image Control Tooltip-->
                     <TextBlock.ToolTip>
                             <Grid>
                                 <Image Source="{Binding FullImagePath}"></Image>
                             </Grid>
                         </TextBlock.ToolTip>
-
                 </TextBlock>
                 <TextBlock Foreground="White" HorizontalAlignment="Right">
                     <TextBlock.Text>
@@ -43,53 +39,96 @@
                 </TextBlock>
             </Grid>
         </DataTemplate>
+        
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Control.Foreground" Value="White"></Setter>
+        </Style>
+
     </UserControl.Resources>
 
         <Grid x:Name="mainMenuLayoutRoot">
-		<Button x:Name="FileSizeManager" Height="40" HorizontalAlignment="Left" Margin="600,0,0,0" VerticalAlignment="Bottom" Width="200" FontSize="21.333" Content="File size manager" Click="FileSizeManagerButtonClick"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.8*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="6.0*"/>
+            <RowDefinition Height="0.7*"/>
+        </Grid.RowDefinitions>
             
-        <ListBox x:Name="listBoxChosenFiles" ItemTemplate="{DynamicResource ImageGalleryDataTemplate}" Drop="ListBoxChosenFilesDrop" AllowDrop="True"  ItemsSource="{Binding}" HorizontalAlignment="Stretch" ItemsPanel="{DynamicResource ImageGalleryItemsPanelTemplate}" Margin="0,200,0,45">
+       
+        <UniformGrid Columns="4" Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+            <StackPanel Margin="0,0,20,0">
+                <Button Height="42" HorizontalAlignment="Left" Name="ChooseFiles" Width="41" Click="ChooseFilesClick" Style="{StaticResource OpacityHover}" Cursor="Hand">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/Imgu;component/Images/Pictures-icon.png" />
+                    </Button.Background>
+                </Button>
+                <TextBlock FontSize="14" Foreground="White" Text="Välj filer" />
+            </StackPanel>
+            <StackPanel>
+            <Button Cursor="Hand" Height="42" HorizontalAlignment="Left" Name="buttonChooseFolder" Style="{StaticResource OpacityHover}" Width="34" Click="ButtonChooseFolderClick">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/Add-Folder-icon.png" />
+                </Button.Background>
+            </Button>
+            <TextBlock FontSize="14" Foreground="White" Text="Välj mapp" />
+            </StackPanel>
+            </StackPanel>
+            <StackPanel>
+            <Button Height="99" Name="Move" VerticalAlignment="Top" Width="99" Click="MoveClick" Style="{StaticResource OpacityHover}" Cursor="Hand" Focusable="True" IsDefault="True">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/tick.png" />
+                </Button.Background>
+            </Button>
+            <TextBlock Text="Sortera" TextAlignment="Center" Foreground="White" FontSize="14" />
+            </StackPanel>
+           
+            <StackPanel>
+                <TextBlock Name="textBlockCounter" Text="1555/1555" Foreground="White" FontSize="28" />
+                <Label Content="labelCopyingStatus" Name="labelCopyingStatus" Foreground="White" />
+            </StackPanel>
+
+            <Button Height="22" Width="25" HorizontalAlignment="Right" Name="AppSettings" VerticalAlignment="Top" Cursor="Hand" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="SettingsButtonClick" Style="{StaticResource OpacityHover}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/settings-icon.png" />
+                </Button.Background>
+            </Button>
+        </UniformGrid>
+            
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="ButtonEdit" Height="32" Width="32" Cursor="Hand" BorderBrush="{x:Null}"  VerticalAlignment="Bottom" Click="EditClick" Style="{StaticResource OpacityHover}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/edit.png"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="ButtonClear" Height="32" Width="32" HorizontalAlignment="Right" Cursor="Hand" BorderBrush="{x:Null}"  VerticalAlignment="Bottom" Click="ClearClick" Style="{StaticResource OpacityHover}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/broom.png"/>
+                </Button.Background>
+            </Button>
+
+        </StackPanel>
+
+        <ListBox Grid.Row="2" x:Name="listBoxChosenFiles" ItemTemplate="{DynamicResource ImageGalleryDataTemplate}" Drop="ListBoxChosenFilesDrop" AllowDrop="True"  ItemsSource="{Binding}" HorizontalAlignment="Stretch" ItemsPanel="{DynamicResource ImageGalleryItemsPanelTemplate}" SelectionMode="Multiple" SelectionChanged="ListBoxChosenFilesSelectionChanged">
             <ListBox.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="Black"/>
-                    <GradientStop Color="#FF1E2A2F" Offset="1"/>
+                    <GradientStop Color="#FF123D4F" Offset="1"/>
                 </LinearGradientBrush>
             </ListBox.Background>
         </ListBox>
 
-        <Button Height="42" HorizontalAlignment="Left" Name="ChooseFiles" VerticalAlignment="Top" Width="41" Click="ChooseFilesClick" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Margin="0,23,0,0">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/Pictures-icon.png" />
-            </Button.Background>
-        </Button>
-        <Button Cursor="Hand" Height="42" HorizontalAlignment="Left" Margin="90,23,0,0" Name="buttonChooseFolder" Style="{StaticResource MyButtonStyle}" VerticalAlignment="Top" Width="34" Click="ButtonChooseFolderClick">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/Add-Folder-icon.png" />
-            </Button.Background>
-        </Button>
-        <Button Height="99" HorizontalAlignment="Left" Margin="251,23,0,0" Name="Move" VerticalAlignment="Top" Width="99" Click="MoveClick" Style="{StaticResource MyButtonStyle}" Cursor="Hand" Focusable="True">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/tick.png" />
-            </Button.Background>
-        </Button>
-        <Button Height="46" HorizontalAlignment="Left" Margin="581,0,0,0" Name="AppSettings" VerticalAlignment="Top" Width="46" Cursor="Hand" BorderBrush="{x:Null}" Foreground="{x:Null}" Click="SettingsButtonClick" Style="{StaticResource MyButtonStyle}">
-            <Button.Background>
-                <ImageBrush ImageSource="/Imgu;component/Images/settings-alt-glow-icon.png" />
-            </Button.Background>
-        </Button>
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="275,2,0,0" Name="textBlock1" Text="Sortera" VerticalAlignment="Top" Foreground="White" FontSize="14" />
-        <TextBlock FontSize="14" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="0,8,0,0" Name="textBlock2" Text="Välj filer" VerticalAlignment="Top" />
-        <TextBlock FontSize="14" Foreground="White" Height="23" HorizontalAlignment="Left" Margin="77,8,0,0" Name="textBlock3" Text="Välj mapp" VerticalAlignment="Top" />
-        <StackPanel Height="65" HorizontalAlignment="Left" Margin="363,0,0,0" Name="stackPanel1" VerticalAlignment="Top" Width="220">
-            <TextBlock Name="textBlockCounter" Text="1555/1555" Foreground="White" FontSize="28" />
-            <Label Content="labelCopyingStatus" Name="labelCopyingStatus" Foreground="White" />
-        </StackPanel>
-        <Grid.Background>
-            <ImageBrush />
-        </Grid.Background>
+        <UniformGrid Grid.Row="3">
+            <Label Name="ShowFailedFiles" Visibility="Hidden" Foreground="Red" MouseDown="ShowFailedFilesMouseDown">Visa filer som inte kunde flyttas</Label>
+            <Button x:Name="FileSizeManager" HorizontalAlignment="Right" FontSize="18" Content="File size manager" Click="FileSizeManagerButtonClick"/>
+        </UniformGrid>
     </Grid>
+    
     <UserControl.Background>
-        <ImageBrush ImageSource="/Imgu;component/Images/Sandpaper2.png" Stretch="UniformToFill" />
+        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF303030" Offset="1"/>
+            <GradientStop Color="#FF1F1F1F" Offset="0.162"/>
+        </LinearGradientBrush>
     </UserControl.Background>
 
 </UserControl>

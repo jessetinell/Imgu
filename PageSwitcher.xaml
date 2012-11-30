@@ -1,5 +1,5 @@
 ﻿<Window x:Class="Imgu.PageSwitcher"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Height="638" Width="816">
+    Height="938" Width="816" Title="Imgu" Icon="folder_image.ico">
 </Window>

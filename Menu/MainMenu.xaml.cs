@@ -14,15 +14,18 @@ using System.Linq;
 
 namespace Imgu.Menu
 {
-	public partial class MainMenu : ISwitchable
-	{
-		public MainMenu()
-		{
-			InitializeComponent();
+    public partial class MainMenu : ISwitchable
+    {
+        public MainMenu()
+        {
+            InitializeComponent();
             DataContext = this;
             textBlockCounter.Text = "";
             labelCopyingStatus.Content = "";
-		}
+            ButtonClear.Visibility = Visibility.Hidden;
+            ButtonEdit.Visibility = Visibility.Hidden;
+
+        }
         #region ISwitchable Members
         public void UtilizeState(object state)
         {
@@ -31,14 +34,14 @@ namespace Imgu.Menu
         #endregion
 
         private void FileSizeManagerButtonClick(object sender, RoutedEventArgs e)
-		{
+        {
             Switcher.Switch(new FileSizeManager());
-		}
+        }
 
         private void SettingsButtonClick(object sender, RoutedEventArgs e)
-		{
+        {
             Switcher.Switch(new AppSettings());
-		}
+        }
 
 
         #region Fields
@@ -48,6 +51,7 @@ namespace Imgu.Menu
         FileProperties _fp;
         readonly SetFolderIcon _sfi = new SetFolderIcon();
         readonly ObservableCollection<FileProperties> _theImages = new ObservableCollection<FileProperties>();
+        readonly List<FileProperties> _failedFiles = new List<FileProperties>();
         #endregion
 
         #region Choose-Files-button
@@ -70,8 +74,7 @@ namespace Imgu.Menu
             {
                 openSettings();
             }
-            CountUploadedFiles(Current = 0, true, "");
-            listBoxChosenFiles.DataContext = _theImages.OrderBy(f => f.DateTaken);
+            Done();
         }
         #endregion
 
@@ -79,22 +82,20 @@ namespace Imgu.Menu
         private void SortFile(string file, string filename)
         {
             string format = file.Substring(file.Length - 3).ToLower();
-            string[] imageFormats = { "jpg", "peg", "gif", "png" };
+            string[] imageFormats = { "jpg", "peg", "png" };
             string[] videoFormats = { "avi", "3gp", "mov", "mp4", "mpg", "mkv", "wmv", ".rm", "vob", "amr", "bmp" };
             if (imageFormats.Contains(format))
             {
                 CreateImageObject(file, filename);
-                //listBoxChosenFiles.Items.Add(file);
                 CountUploadedFiles(++Current, false, "");
             }
             else if (videoFormats.Contains(format))
             {
                 CreateFileObject(file);
-                //listBoxChosenFiles.Items.Add(file);
                 CountUploadedFiles(++Current, false, "");
             }
             else
-                ShowProblemFiles(file);
+                CreateProblemFileObject(file);
         }
         #endregion
 
@@ -108,7 +109,19 @@ namespace Imgu.Menu
             _fp.FullImagePath = _fi.FullName;
             _fp.FileName = _fi.Name;
             _fp.FolderPath = _fi.DirectoryName;
+            _fp.FileType=FileProperties.FileTypes.Video;
             _theImages.Add(_fp);
+        }
+        void CreateProblemFileObject(string file)
+        {
+            if (!file.EndsWith("db"))
+            {
+                _fp = new FileProperties();
+                _fi = new FileInfo(file);
+                _fp.FileName = _fi.FullName;
+                _failedFiles.Add(_fp);
+                ShowFailedFiles.Visibility = Visibility.Visible;
+            }
         }
         #endregion
 
@@ -300,11 +313,6 @@ namespace Imgu.Menu
                 File.Copy(file.FullImagePath, targetDay, true);
             }
         }
-        void ShowProblemFiles(string file)
-        {
-            if (!file.EndsWith("db"))
-                listBoxChosenFiles.Items.Add(file + "---------FILEN KAN INTE FLYTTAS---------");
-        }
         #endregion
 
         #region Sort Folder
@@ -391,8 +399,7 @@ namespace Imgu.Menu
                         }
                     }
                     if (droppedFilePaths != null) Array.Clear(droppedFilePaths, 0, droppedFilePaths.Length);
-                    CountUploadedFiles(Current = 0, true, "");
-                    listBoxChosenFiles.DataContext = _theImages.OrderBy(f=>f.DateTaken);
+                    Done();
                 }
                 else
                 {
@@ -401,5 +408,74 @@ namespace Imgu.Menu
             }
         }
         #endregion
-	}
+
+        #region Done
+        void Done()
+        {
+            CountUploadedFiles(Current = 0, true, "");
+            if (_theImages.Count > 0)
+            {
+                listBoxChosenFiles.DataContext = _theImages.OrderBy(f => f.DateTaken);
+                ButtonClear.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                listBoxChosenFiles.DataContext = _theImages;
+                ButtonClear.Visibility = Visibility.Hidden;
+            }
+        }
+        #endregion
+
+        #region Visa/Dölj problemfiler
+        private bool _show;
+        private void ShowFailedFilesMouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (_show)
+            {
+                ShowFailedFiles.Content = "Visa filer som inte kunde flyttas";
+                listBoxChosenFiles.ItemsSource = _theImages.OrderBy(f => f.DateTaken);
+                _show = false;
+            }
+            else
+            {
+                ShowFailedFiles.Content = "Dölj";
+                listBoxChosenFiles.ItemsSource = _failedFiles;
+                _show = true;
+            }
+
+        }
+        #endregion
+
+        #region Misc buttons
+        private void ClearClick(object sender, RoutedEventArgs e)
+        {
+            _theImages.Clear();
+            Done();
+        }
+
+        private void EditClick(object sender, RoutedEventArgs e)
+        {
+            var selectedItems = listBoxChosenFiles.SelectedItems;
+            
+            var items = (IList<FileProperties>)selectedItems.Cast<FileProperties>().ToList();
+
+            //var indexes= (from object selectedItem in selectedItems select listBoxChosenFiles.Items.IndexOf(selectedItem)).ToList();
+            //foreach (var index in indexes)
+            //{
+            //    _theImages.OrderBy(f=>f.DateTaken).RemoveAt(index);
+            //}
+            //var asd = _theImages;
+            
+            Switcher.Switch(new Edit(_theImages,items));
+        }
+
+        private void ListBoxChosenFilesSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ButtonEdit.Visibility = listBoxChosenFiles.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        #endregion
+
+
+    }
 }

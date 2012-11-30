@@ -1,0 +1,66 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:Imgu"
+	mc:Ignorable="d"
+	x:Class="Imgu.Edit"
+	d:DesignWidth="640" Background="#FF1F1F1F" Padding="5" Foreground="White">
+
+    <UserControl.Resources>
+        <local:FormatTime x:Key="TimeFormat"/>
+        <ItemsPanelTemplate x:Key="ImageGalleryItemsPanelTemplate">
+            <UniformGrid Columns="1"/>
+        </ItemsPanelTemplate>
+        <DataTemplate x:Key="ImageGalleryDataTemplate">
+            <Grid Width="600">
+                <TextBlock Foreground="White">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0}">
+                            <Binding Path="FileName" />
+
+                        </MultiBinding>
+                    </TextBlock.Text>
+                    <TextBlock.ToolTip>
+                        <Grid>
+                            <Image Source="{Binding FullImagePath}"></Image>
+                        </Grid>
+                    </TextBlock.ToolTip>
+                </TextBlock>
+                <TextBlock Foreground="White" HorizontalAlignment="Right">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{} ({0})">
+
+                            <Binding Path="DateTaken" Converter="{StaticResource TimeFormat}" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Grid Height="500">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <UniformGrid Columns="4">
+            <Button Name="ButtonBack" Width="70" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ButtonBackClick">Tillbaka</Button>
+            <Calendar Name="CalendarChooseDate" Grid.Row="0" HorizontalAlignment="Center" />
+            <StackPanel>
+                <Button Name="ButtonSetDate" Width="40" Height="20" Click="ButtonSetDateClick">Set</Button>
+                <TextBlock Name="LabelError" Margin="0,15" Foreground="Red" VerticalAlignment="Bottom" HorizontalAlignment="Right"></TextBlock>
+            </StackPanel>
+            
+        </UniformGrid>
+        <ListBox Name="listBoxFiles" Grid.Row="1" ItemTemplate="{DynamicResource ImageGalleryDataTemplate}" ItemsSource="{Binding}" ItemsPanel="{DynamicResource ImageGalleryItemsPanelTemplate}">
+            <ListBox.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF727272" Offset="0"/>
+                    <GradientStop Color="#FF525661" Offset="1"/>
+                </LinearGradientBrush>
+            </ListBox.Background>
+        </ListBox>
+    </Grid>
+</UserControl>

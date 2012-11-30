@@ -62,11 +62,15 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>folder_image.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq">
@@ -88,7 +92,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DragSelectionHelper.cs" />
     <Compile Include="FormatTime.cs" />
+    <Page Include="Menu\Edit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Menu\FileSizeManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -119,6 +128,9 @@
     </Compile>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FileProperties.cs" />
+    <Compile Include="Menu\Edit.xaml.cs">
+      <DependentUpon>Edit.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PageSwitcher.xaml.cs">
       <DependentUpon>PageSwitcher.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -178,16 +190,31 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\settings-icon.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Add-Folder-icon.png" />
     <Resource Include="Images\Developer-Purple-Folder-icon.png" />
     <Resource Include="Images\Downloads-Black-Folder-icon.png" />
     <Resource Include="Images\Gallery.ico" />
     <Resource Include="Images\Pictures-icon.png" />
-    <Resource Include="Images\Sandpaper2.png" />
-    <Resource Include="Images\settings-alt-glow-icon.png" />
     <Resource Include="Images\tick.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\StandardMonth.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="folder_image.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\broom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Classes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

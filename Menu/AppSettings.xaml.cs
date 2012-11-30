@@ -21,7 +21,7 @@ namespace Imgu
             throw new NotImplementedException();
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void ButtonBackClick(object sender, System.Windows.RoutedEventArgs e)
         {
         	Switcher.Switch(new MainMenu());
         }
