@@ -16,11 +16,10 @@
         </ItemsPanelTemplate>
         <DataTemplate x:Key="ImageGalleryDataTemplate">
             <Grid Width="600">
-                <TextBlock Foreground="White">
+                <TextBlock Foreground="White"> 
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0}">
                             <Binding Path="FileName" />
-
                         </MultiBinding>
                     </TextBlock.Text>
                     <TextBlock.ToolTip>
@@ -32,7 +31,6 @@
                 <TextBlock Foreground="White" HorizontalAlignment="Right">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{} ({0})">
-
                             <Binding Path="DateTaken" Converter="{StaticResource TimeFormat}" />
                         </MultiBinding>
                     </TextBlock.Text>
@@ -57,22 +55,14 @@
        
         <UniformGrid Columns="4" Grid.Row="0">
             <StackPanel Orientation="Horizontal">
-            <StackPanel Margin="0,0,20,0">
-                <Button Height="42" HorizontalAlignment="Left" Name="ChooseFiles" Width="41" Click="ChooseFilesClick" Style="{StaticResource OpacityHover}" Cursor="Hand">
+                <StackPanel>
+                <Button Height="45" Width="33" Name="ButtonDropboxSync" VerticalAlignment="Top" HorizontalAlignment="Left" Click="DropboxSyncClick" Style="{StaticResource OpacityHover}" Cursor="Hand" Focusable="True" IsDefault="True">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Imgu;component/Images/Pictures-icon.png" />
+                        <ImageBrush ImageSource="/Imgu;component/Images/dropbox-sync.png" />
                     </Button.Background>
                 </Button>
-                <TextBlock FontSize="14" Foreground="White" Text="Välj filer" />
-            </StackPanel>
-            <StackPanel>
-            <Button Cursor="Hand" Height="42" HorizontalAlignment="Left" Name="buttonChooseFolder" Style="{StaticResource OpacityHover}" Width="34" Click="ButtonChooseFolderClick">
-                <Button.Background>
-                    <ImageBrush ImageSource="/Imgu;component/Images/Add-Folder-icon.png" />
-                </Button.Background>
-            </Button>
-            <TextBlock FontSize="14" Foreground="White" Text="Välj mapp" />
-            </StackPanel>
+                    <Label Name="LabelDropboxCameraUploads" Foreground="White">Lokalisera Camera Uploads</Label>
+                </StackPanel>
             </StackPanel>
             <StackPanel>
             <Button Height="99" Name="Move" VerticalAlignment="Top" Width="99" Click="MoveClick" Style="{StaticResource OpacityHover}" Cursor="Hand" Focusable="True" IsDefault="True">
@@ -95,7 +85,16 @@
             </Button>
         </UniformGrid>
             
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="ButtonSelectAll" Height="32" Width="32" HorizontalAlignment="Left" Cursor="Hand" BorderBrush="{x:Null}"  VerticalAlignment="Bottom" Click="SelectAllClick" Style="{StaticResource OpacityHover}">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Imgu;component/Images/select-all.png"/>
+                </Button.Background>
+            </Button>
+            <Label Name="ShowFailedFiles" Visibility="Visible" Foreground="Red" Margin="20,0,0,0" VerticalAlignment="Bottom" MouseDown="ShowFailedFilesMouseDown">Visa filer som inte kunde flyttas</Label>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
             <Button x:Name="ButtonEdit" Height="32" Width="32" Cursor="Hand" BorderBrush="{x:Null}"  VerticalAlignment="Bottom" Click="EditClick" Style="{StaticResource OpacityHover}">
                 <Button.Background>
                     <ImageBrush ImageSource="/Imgu;component/Images/edit.png"/>
@@ -106,8 +105,9 @@
                     <ImageBrush ImageSource="/Imgu;component/Images/broom.png"/>
                 </Button.Background>
             </Button>
+            </StackPanel>
 
-        </StackPanel>
+        </Grid>
 
         <ListBox Grid.Row="2" x:Name="listBoxChosenFiles" ItemTemplate="{DynamicResource ImageGalleryDataTemplate}" Drop="ListBoxChosenFilesDrop" AllowDrop="True"  ItemsSource="{Binding}" HorizontalAlignment="Stretch" ItemsPanel="{DynamicResource ImageGalleryItemsPanelTemplate}" SelectionMode="Multiple" SelectionChanged="ListBoxChosenFilesSelectionChanged">
             <ListBox.Background>
@@ -119,7 +119,6 @@
         </ListBox>
 
         <UniformGrid Grid.Row="3">
-            <Label Name="ShowFailedFiles" Visibility="Hidden" Foreground="Red" MouseDown="ShowFailedFilesMouseDown">Visa filer som inte kunde flyttas</Label>
             <Button x:Name="FileSizeManager" HorizontalAlignment="Right" FontSize="18" Content="File size manager" Click="FileSizeManagerButtonClick"/>
         </UniformGrid>
     </Grid>

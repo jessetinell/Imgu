@@ -92,15 +92,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Apps\FileSize\ExtensionMethods.cs" />
+    <Compile Include="Apps\FileSize\File.cs" />
+    <Compile Include="Apps\FileSize\Sort.cs" />
     <Compile Include="DragSelectionHelper.cs" />
     <Compile Include="FormatTime.cs" />
     <Page Include="Menu\Edit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Menu\FileSizeManager.xaml">
+    <Page Include="Apps\FileSize\FileSizeManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Menu\FileSizeManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -131,6 +138,9 @@
     <Compile Include="Menu\Edit.xaml.cs">
       <DependentUpon>Edit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Menu\FileSizeManager.xaml.cs">
+      <DependentUpon>FileSizeManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PageSwitcher.xaml.cs">
       <DependentUpon>PageSwitcher.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -138,7 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISwitchable.cs" />
-    <Compile Include="Menu\FileSizeManager.xaml.cs">
+    <Compile Include="Apps\FileSize\FileSizeManager.xaml.cs">
       <DependentUpon>FileSizeManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menu\MainMenu.xaml.cs">
@@ -215,6 +225,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\edit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\dropbox-sync.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\select-all.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

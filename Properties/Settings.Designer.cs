@@ -70,5 +70,41 @@ namespace Imgu.Properties {
                 this["ShowCreatedFolderExpander"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideDropbox {
+            get {
+                return ((bool)(this["HideDropbox"]));
+            }
+            set {
+                this["HideDropbox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool UsingDropbox {
+            get {
+                return ((bool)(this["UsingDropbox"]));
+            }
+            set {
+                this["UsingDropbox"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DropboxFolderPath {
+            get {
+                return ((string)(this["DropboxFolderPath"]));
+            }
+            set {
+                this["DropboxFolderPath"] = value;
+            }
+        }
     }
 }

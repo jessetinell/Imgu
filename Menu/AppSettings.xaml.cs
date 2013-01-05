@@ -13,6 +13,10 @@ namespace Imgu
 			// Required to initialize variables
 			InitializeComponent();
             UpdateTextBlocks();
+            if(Settings.Default.HideDropbox)
+            {
+                HideDropbox.IsChecked = true;
+            }
 		}
 
         #region ISwitchable Members
@@ -62,6 +66,16 @@ namespace Imgu
             textBoxNoDataFolder.Text = Settings.Default.MiscFolder;
             textBlockMonthIcon.Text = Settings.Default.MonthIcon;
             textBoxNoDataFolder.Text = !String.IsNullOrEmpty(Settings.Default.MiscFolder) ? Settings.Default.MiscFolder : "Övrigt";
+        }
+
+        private void HideDropboxChecked(object sender, RoutedEventArgs e)
+        {
+            if(Settings.Default.HideDropbox)
+            Settings.Default.HideDropbox = false;
+            else
+                Settings.Default.HideDropbox = true;
+
+            Settings.Default.Save();
         }
 	}
 }

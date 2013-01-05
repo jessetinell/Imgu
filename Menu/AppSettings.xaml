@@ -42,7 +42,17 @@
                     </Button>
                     <TextBlock Margin="5,0,0,0" Name="textBlockMonthIcon" Text="Aktuell fil" VerticalAlignment="Center" />
                 </StackPanel>
-                
+
+                <TextBlock HorizontalAlignment="Left" Margin="0,20,0,5" Text="Dölj Dropbox-funktionen" VerticalAlignment="Top" />
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource OpacityHover}" Height="45" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Click="ButtonSelectMonthIconClick">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Imgu;component/Images/dropbox-sync.png" />
+                        </Button.Background>
+                    </Button>
+                    <CheckBox Name="HideDropbox" VerticalAlignment="Center" Checked="HideDropboxChecked"></CheckBox>
+                </StackPanel>
+
                 <TextBlock Text="Namn på mappen där filer utan datum hamnar" Margin="0,20,0,5"/>
                 <TextBox Name="textBoxNoDataFolder" Width="257" HorizontalAlignment="Left" />
 

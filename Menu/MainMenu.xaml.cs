@@ -11,6 +11,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using File = System.IO.File;
 
 namespace Imgu.Menu
 {
@@ -24,7 +25,8 @@ namespace Imgu.Menu
             labelCopyingStatus.Content = "";
             ButtonClear.Visibility = Visibility.Hidden;
             ButtonEdit.Visibility = Visibility.Hidden;
-
+            ShowFailedFiles.Visibility = Visibility.Hidden;
+            ShowOrHideDropbox();
         }
         #region ISwitchable Members
         public void UtilizeState(object state)
@@ -35,7 +37,7 @@ namespace Imgu.Menu
 
         private void FileSizeManagerButtonClick(object sender, RoutedEventArgs e)
         {
-            Switcher.Switch(new FileSizeManager());
+            //Switcher.Switch(new FileSizeManager());
         }
 
         private void SettingsButtonClick(object sender, RoutedEventArgs e)
@@ -52,30 +54,6 @@ namespace Imgu.Menu
         readonly SetFolderIcon _sfi = new SetFolderIcon();
         readonly ObservableCollection<FileProperties> _theImages = new ObservableCollection<FileProperties>();
         readonly List<FileProperties> _failedFiles = new List<FileProperties>();
-        #endregion
-
-        #region Choose-Files-button
-        private void ChooseFilesClick(object sender, RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(TargetFolder))
-            {
-                using (var open = new System.Windows.Forms.OpenFileDialog())
-                {
-                    open.Multiselect = true;
-                    open.ShowDialog();
-
-                    foreach (string file in open.FileNames)
-                    {
-                        SortFile(file, open.SafeFileName);
-                    }
-                }
-            }
-            else
-            {
-                openSettings();
-            }
-            Done();
-        }
         #endregion
 
         #region SortFile-function
@@ -109,12 +87,12 @@ namespace Imgu.Menu
             _fp.FullImagePath = _fi.FullName;
             _fp.FileName = _fi.Name;
             _fp.FolderPath = _fi.DirectoryName;
-            _fp.FileType=FileProperties.FileTypes.Video;
+            _fp.FileType = FileProperties.FileTypes.Video;
             _theImages.Add(_fp);
         }
         void CreateProblemFileObject(string file)
         {
-            if (!file.EndsWith("db"))
+            if (!file.EndsWith("db") && !file.EndsWith("desktop.ini"))
             {
                 _fp = new FileProperties();
                 _fi = new FileInfo(file);
@@ -193,6 +171,39 @@ namespace Imgu.Menu
             }
         }
 
+        #endregion
+
+        #region Startup methods
+        private void ShowOrHideDropbox()
+        {
+            var hide = Settings.Default.HideDropbox;
+            try
+            {
+                var hasDropbox = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dropbox\\host.db");
+                if (string.IsNullOrEmpty(hasDropbox) && hide == false)
+                {
+                    //Har ej installerat Dropbox
+                    hide = true;
+                    Settings.Default.HideDropbox = true;
+                    Settings.Default.Save();
+                }
+            }
+            catch
+            {
+
+            }
+
+            if (hide)
+            {
+                LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
+                ButtonDropboxSync.Visibility = Visibility.Hidden;
+            }
+            else if (Settings.Default.UsingDropbox)
+            {
+                LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
+            }
+        }
         #endregion
 
         #region Count uploaded files
@@ -316,23 +327,6 @@ namespace Imgu.Menu
         #endregion
 
         #region Sort Folder
-        private void ButtonChooseFolderClick(object sender, RoutedEventArgs e)
-        {
-            if (!String.IsNullOrEmpty(TargetFolder))
-            {
-                var folder = new FolderBrowserDialog();
-                folder.ShowDialog();
-                if (folder.SelectedPath != "")
-                {
-                    SortFolder(folder.SelectedPath);
-                }
-            }
-            else
-            {
-                openSettings();
-            }
-            listBoxChosenFiles.ItemsSource = _theImages.OrderBy(f => f.DateTaken);
-        }
         void SortFolder(string root)
         {
             var dirs = new Stack<string>();
@@ -355,6 +349,7 @@ namespace Imgu.Menu
                     dirs.Push(str);
             }
             CountUploadedFiles(Current = 0, true, "");
+            Done();
         }
         #endregion
 
@@ -456,7 +451,7 @@ namespace Imgu.Menu
         private void EditClick(object sender, RoutedEventArgs e)
         {
             var selectedItems = listBoxChosenFiles.SelectedItems;
-            
+
             var items = (IList<FileProperties>)selectedItems.Cast<FileProperties>().ToList();
 
             //var indexes= (from object selectedItem in selectedItems select listBoxChosenFiles.Items.IndexOf(selectedItem)).ToList();
@@ -465,8 +460,8 @@ namespace Imgu.Menu
             //    _theImages.OrderBy(f=>f.DateTaken).RemoveAt(index);
             //}
             //var asd = _theImages;
-            
-            Switcher.Switch(new Edit(_theImages,items));
+
+            Switcher.Switch(new Edit(_theImages, items));
         }
 
         private void ListBoxChosenFilesSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -474,8 +469,30 @@ namespace Imgu.Menu
             ButtonEdit.Visibility = listBoxChosenFiles.SelectedItems.Count > 0 ? Visibility.Visible : Visibility.Hidden;
         }
 
-        #endregion
+        private void SelectAllClick(object sender, RoutedEventArgs e)
+        {
+            listBoxChosenFiles.SelectAll();
+        }
 
+        private void DropboxSyncClick(object sender, RoutedEventArgs e)
+        {
+            var folderPath = Settings.Default.DropboxFolderPath;
+            if (string.IsNullOrEmpty(folderPath))
+            {
+                var dropboxFolder = new FolderBrowserDialog();
+                dropboxFolder.ShowDialog();
+                if (dropboxFolder.SelectedPath == "") return;
+                Settings.Default.DropboxFolderPath = dropboxFolder.SelectedPath;
+                Settings.Default.UsingDropbox = true;
+                LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
+                Settings.Default.Save();
+            }
+            else
+            {
+                SortFolder(folderPath);
+            }
+        }
+        #endregion
 
     }
 }

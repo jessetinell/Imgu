@@ -4,7 +4,7 @@ using System.Windows.Data;
 
 namespace Imgu
 {
-    class FormatTime : IValueConverter
+    public class FormatTime : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

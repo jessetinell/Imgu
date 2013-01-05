@@ -45,7 +45,7 @@ namespace Imgu
             var timeString = chosenTime.ToString("yyyy:MM:dd ");
             foreach (var file in _files)
             {
-                var time = file.DateTaken.ToLongTimeString();
+                var time = file.DateTaken.ToLongTimeString().DenyMidnight();
                 timeString += time;
                 switch (file.FileType)
                 {
