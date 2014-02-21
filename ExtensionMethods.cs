@@ -1,4 +1,6 @@
-﻿namespace Imgu
+﻿using System;
+
+namespace Imgu
 {
     public static class ExtensionMethods
     {

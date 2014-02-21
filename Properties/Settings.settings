@@ -14,12 +14,6 @@
     <Setting Name="ShowCreatedFolderExpander" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="HideDropbox" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="UsingDropbox" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="DropboxFolderPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

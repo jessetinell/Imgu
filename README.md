@@ -29,3 +29,10 @@ Instead of creating each directory manually I built Imgu. Nowadays my files are 
 Note
 -------------
 I made this when i was studying and it does not have the best coding practices... :) 
+
+
+Todo
+
+- Async/new thread
+- Status for copying
+- Change date for png

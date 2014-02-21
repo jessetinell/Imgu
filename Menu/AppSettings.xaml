@@ -4,7 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	mc:Ignorable="d"
-	x:Class="Imgu.AppSettings"
+	x:Class="Imgu.Menu.AppSettings"
 	d:DesignWidth="816" d:DesignHeight="938" Padding="5">
 
     <Grid>
@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Button Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,20" Width="100" Content="&lt;- Tillbaka" Click="ButtonBackClick"/>
+        <Button Grid.Row="0" HorizontalAlignment="Left" Margin="0,0,0,20" Width="100" Content="&lt;- Back" Click="ButtonBackClick"/>
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -23,53 +23,33 @@
             </Grid.ColumnDefinitions>
             
             <StackPanel Grid.Column="0">
-                <TextBlock Text="Huvudmappen alla bilder sparas i" Margin="0,0,0,5"/>
+                <TextBlock Text="Main folder" Margin="0,0,0,5"/>
                 <StackPanel Orientation="Horizontal">
                     <Button Style="{StaticResource OpacityHover}" Height="50" HorizontalAlignment="Left" Name="buttonSelectFolder" VerticalAlignment="Top" Width="46" Click="ButtonSelectFolderClick">
                     <Button.Background>
-                        <ImageBrush ImageSource="/Imgu;component/Images/Developer-Purple-Folder-icon.png" />
+                        <ImageBrush ImageSource="/Imgu;component/Icons/purple-cog-folder.png" />
                     </Button.Background>
                 </Button>
-                    <TextBlock Name="textBlockTargetFolder" Margin="5,0,0,0" Text="Aktuell mapp" VerticalAlignment="Center" />
+                    <TextBlock Name="textBlockTargetFolder" Margin="5,0,0,0" Text="Current folder" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <TextBlock HorizontalAlignment="Left" Name="textBlock3" Margin="0,20,0,5" Text="Ikon för månadsmappen" VerticalAlignment="Top" />
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource OpacityHover}" Height="50" HorizontalAlignment="Left" Name="buttonSelectMonthIcon" VerticalAlignment="Top" Width="46" Click="ButtonSelectMonthIconClick">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Imgu;component/Images/Gallery.ico" />
-                        </Button.Background>
-                    </Button>
-                    <TextBlock Margin="5,0,0,0" Name="textBlockMonthIcon" Text="Aktuell fil" VerticalAlignment="Center" />
-                </StackPanel>
-
-                <TextBlock HorizontalAlignment="Left" Margin="0,20,0,5" Text="Dölj Dropbox-funktionen" VerticalAlignment="Top" />
-                <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource OpacityHover}" Height="45" HorizontalAlignment="Left" VerticalAlignment="Top" Width="33" Click="ButtonSelectMonthIconClick">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Imgu;component/Images/dropbox-sync.png" />
-                        </Button.Background>
-                    </Button>
-                    <CheckBox Name="HideDropbox" VerticalAlignment="Center" Checked="HideDropboxChecked"></CheckBox>
-                </StackPanel>
-
-                <TextBlock Text="Namn på mappen där filer utan datum hamnar" Margin="0,20,0,5"/>
+                <TextBlock Text="Name of the folder where files without a date will be put" Margin="0,20,0,5"/>
                 <TextBox Name="textBoxNoDataFolder" Width="257" HorizontalAlignment="Left" />
 
             </StackPanel>
             
             <Grid Grid.Column="1">
              <TextBlock HorizontalAlignment="Right">
-            Filformat som stöds:<LineBreak/>
-            -Bilder<LineBreak/>
+            Supported file formats:<LineBreak/>
+            -Images<LineBreak/>
             -- jpg, gif, png, bmp<LineBreak/><LineBreak/>
-            -Filmer<LineBreak/>
+            -Videos<LineBreak/>
             -- avi, 3gp, mov, mp4, mpg, mkv, wmv, rm, vob, amr
                 </TextBlock>
             </Grid>
         </Grid>
         
-        <Button Content="Spara" Grid.Row="2" HorizontalAlignment="Center" Name="buttonSave" Padding="20,0" Click="ButtonSaveClick" FontSize="28"/>
+        <Button Content="Save" Grid.Row="2" HorizontalAlignment="Center" Name="buttonSave" Padding="20,0" Click="ButtonSaveClick" FontSize="28"/>
         
     </Grid>
     <UserControl.Background>

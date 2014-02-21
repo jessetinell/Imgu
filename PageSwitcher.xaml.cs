@@ -31,7 +31,7 @@ namespace Imgu
                 s.UtilizeState(state);
             else
                 throw new ArgumentException("NextPage is not ISwitchable! "
-                  + nextPage.Name.ToString());
+                  + nextPage.Name);
         }
     }
 }

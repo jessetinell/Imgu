@@ -26,7 +26,6 @@ namespace Imgu.Menu
             ButtonClear.Visibility = Visibility.Hidden;
             ButtonEdit.Visibility = Visibility.Hidden;
             ShowFailedFiles.Visibility = Visibility.Hidden;
-            ShowOrHideDropbox();
         }
         #region ISwitchable Members
         public void UtilizeState(object state)
@@ -34,11 +33,6 @@ namespace Imgu.Menu
             throw new NotImplementedException();
         }
         #endregion
-
-        private void FileSizeManagerButtonClick(object sender, RoutedEventArgs e)
-        {
-            //Switcher.Switch(new FileSizeManager());
-        }
 
         private void SettingsButtonClick(object sender, RoutedEventArgs e)
         {
@@ -51,7 +45,6 @@ namespace Imgu.Menu
         public string NoDataFolder { get; set; }
         public int Current;
         FileProperties _fp;
-        readonly SetFolderIcon _sfi = new SetFolderIcon();
         readonly ObservableCollection<FileProperties> _theImages = new ObservableCollection<FileProperties>();
         readonly List<FileProperties> _failedFiles = new List<FileProperties>();
         #endregion
@@ -173,39 +166,6 @@ namespace Imgu.Menu
 
         #endregion
 
-        #region Startup methods
-        private void ShowOrHideDropbox()
-        {
-            var hide = Settings.Default.HideDropbox;
-            try
-            {
-                var hasDropbox = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Dropbox\\host.db");
-                if (string.IsNullOrEmpty(hasDropbox) && hide == false)
-                {
-                    //Har ej installerat Dropbox
-                    hide = true;
-                    Settings.Default.HideDropbox = true;
-                    Settings.Default.Save();
-                }
-            }
-            catch
-            {
-
-            }
-
-            if (hide)
-            {
-                LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
-                ButtonDropboxSync.Visibility = Visibility.Hidden;
-            }
-            else if (Settings.Default.UsingDropbox)
-            {
-                LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
-            }
-        }
-        #endregion
-
         #region Count uploaded files
         public void CountUploadedFiles(int counter, bool result, string fileName)
         {
@@ -225,9 +185,10 @@ namespace Imgu.Menu
             #endregion
             if (result)
             {
+
                 textBlockCounter.Text = counter.ToString(CultureInfo.InvariantCulture) + " / " + _theImages.Count;
                 if (fileName != "")
-                    labelCopyingStatus.Content = "Kopierar " + fileName;
+                    labelCopyingStatus.Content = "Copying " + fileName;
                 else
                     labelCopyingStatus.Content = "";
             }
@@ -249,14 +210,12 @@ namespace Imgu.Menu
             if (!Directory.Exists(targetYear))
             {
                 Directory.CreateDirectory(targetYear);
-                _sfi.setFolderIcon(targetYear, 43);
             }
 
             //om MÅNAD inte finns
             if (!Directory.Exists(targetMonth))
             {
                 Directory.CreateDirectory(targetMonth);
-                _sfi.setFolderIcon(targetMonth, 0);
             }
 
             //om WHATEVA-mappen inte finns
@@ -275,39 +234,33 @@ namespace Imgu.Menu
         }
         void CopyFiles(FileProperties file)
         {
-            string targetYear = TargetFolder + "\\" + file.DateTaken.Year;
-            string month = file.DateTaken.ToString("MMMM").UppercaseFirst();
-            string monthNumber = file.DateTaken.Month.ToString(CultureInfo.InvariantCulture);
-            string targetMonth = targetYear + "\\" + monthNumber + ". " + month;
+            var targetYear = TargetFolder + "\\" + file.DateTaken.Year;
+            var month = file.DateTaken.ToString("MMMM").UppercaseFirst();
+            var monthNumber = file.DateTaken.Month.ToString(CultureInfo.InvariantCulture);
+            var targetMonth = targetYear + "\\" + monthNumber + ". " + month;
             string targetDay;
-
-            string day;
 
             //For images taken on late nights ex. on a party. Copies the image to the same day as the party started.
             if (file.DateTaken.Hour < 4 && file.DateTaken.Day != 1)
             {
                 int lateNight = file.DateTaken.Day - 1;
                 targetDay = targetMonth + "\\" + lateNight;
-                day = lateNight.ToString(CultureInfo.InvariantCulture) + " --Sen kväll";
             }
             else
             {
                 targetDay = targetMonth + "\\" + file.DateTaken.Day;
-                day = file.DateTaken.Day.ToString(CultureInfo.InvariantCulture);
             }
 
             //Om ÅR inte finns
             if (!Directory.Exists(targetYear))
             {
                 Directory.CreateDirectory(targetYear);
-                _sfi.setFolderIcon(targetYear, 43);
             }
 
             //om MÅNAD inte finns
             if (!Directory.Exists(targetMonth))
             {
                 Directory.CreateDirectory(targetMonth);
-                _sfi.setFolderIcon(targetMonth, 0);
             }
 
             //om DAG inte finns, skapa mappen
@@ -454,13 +407,6 @@ namespace Imgu.Menu
 
             var items = (IList<FileProperties>)selectedItems.Cast<FileProperties>().ToList();
 
-            //var indexes= (from object selectedItem in selectedItems select listBoxChosenFiles.Items.IndexOf(selectedItem)).ToList();
-            //foreach (var index in indexes)
-            //{
-            //    _theImages.OrderBy(f=>f.DateTaken).RemoveAt(index);
-            //}
-            //var asd = _theImages;
-
             Switcher.Switch(new Edit(_theImages, items));
         }
 
@@ -483,7 +429,6 @@ namespace Imgu.Menu
                 dropboxFolder.ShowDialog();
                 if (dropboxFolder.SelectedPath == "") return;
                 Settings.Default.DropboxFolderPath = dropboxFolder.SelectedPath;
-                Settings.Default.UsingDropbox = true;
                 LabelDropboxCameraUploads.Visibility = Visibility.Hidden;
                 Settings.Default.Save();
             }

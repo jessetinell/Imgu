@@ -4,7 +4,7 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:local="clr-namespace:Imgu"
 	mc:Ignorable="d"
-	x:Class="Imgu.Edit"
+	x:Class="Imgu.Menu.Edit"
 	d:DesignWidth="640" Background="#FF1F1F1F" Padding="5" Foreground="White">
 
     <UserControl.Resources>
@@ -46,7 +46,7 @@
         </Grid.RowDefinitions>
 
         <UniformGrid Columns="4">
-            <Button Name="ButtonBack" Width="70" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ButtonBackClick">Tillbaka</Button>
+            <Button Name="ButtonBack" Width="70" Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Click="ButtonBackClick">Back</Button>
             <Calendar Name="CalendarChooseDate" Grid.Row="0" HorizontalAlignment="Center" />
             <StackPanel>
                 <Button Name="ButtonSetDate" Width="40" Height="20" Click="ButtonSetDateClick">Set</Button>

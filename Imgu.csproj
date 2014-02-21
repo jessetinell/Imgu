@@ -70,16 +70,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -92,22 +84,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Apps\FileSize\ExtensionMethods.cs" />
-    <Compile Include="Apps\FileSize\File.cs" />
-    <Compile Include="Apps\FileSize\Sort.cs" />
-    <Compile Include="DragSelectionHelper.cs" />
     <Compile Include="FormatTime.cs" />
     <Page Include="Menu\Edit.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Apps\FileSize\FileSizeManager.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Menu\FileSizeManager.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -138,9 +116,6 @@
     <Compile Include="Menu\Edit.xaml.cs">
       <DependentUpon>Edit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Menu\FileSizeManager.xaml.cs">
-      <DependentUpon>FileSizeManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="PageSwitcher.xaml.cs">
       <DependentUpon>PageSwitcher.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -148,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ISwitchable.cs" />
-    <Compile Include="Apps\FileSize\FileSizeManager.xaml.cs">
-      <DependentUpon>FileSizeManager.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Menu\MainMenu.xaml.cs">
       <DependentUpon>MainMenu.xaml</DependentUpon>
     </Compile>
@@ -170,7 +142,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SetFolderIcon.cs" />
     <Compile Include="Switcher.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -201,36 +172,29 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\settings-icon.png" />
+    <Resource Include="Icons\settings-icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Add-Folder-icon.png" />
-    <Resource Include="Images\Developer-Purple-Folder-icon.png" />
-    <Resource Include="Images\Downloads-Black-Folder-icon.png" />
-    <Resource Include="Images\Gallery.ico" />
-    <Resource Include="Images\Pictures-icon.png" />
-    <Resource Include="Images\tick.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Images\StandardMonth.ico" />
+    <Resource Include="Icons\purple-cog-folder.png" />
+    <Resource Include="Icons\tick.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="folder_image.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\broom.png" />
+    <Resource Include="Icons\broom.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Classes\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\edit.png" />
+    <Resource Include="Icons\edit.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\dropbox-sync.png" />
+    <Resource Include="Icons\dropbox-sync.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\select-all.png" />
+    <Resource Include="Icons\select-all.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
