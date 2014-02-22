@@ -36,77 +36,78 @@ namespace Imgu.Menu
         {
             if (CalendarChooseDate.SelectedDate == null) return;
 
-            var chosenTime = (DateTime)CalendarChooseDate.SelectedDate.Value.AddHours(15);
+            var chosenTime = (DateTime)CalendarChooseDate.SelectedDate;
+            var timeString = chosenTime.ToString("yyyy:MM:dd ");
 
             foreach (var file in _files)
             {
                 var time = file.DateTaken.ToLongTimeString().DenyMidnight();
-                var timeString = time;
+                timeString += time;
 
                 switch (file.FileType)
                 {
                     case FileProperties.FileTypes.Image:
                         {
-                            if (File.Exists(file.FullImagePath))
+                            if (!File.Exists(file.FullImagePath))
                             {
                                 return;
                             }
-                                if(file.FullImagePath.EndsWith("png"))
+                            if (file.FullImagePath.EndsWith("png"))
+                            {
+                                MessageBox.Show("Only jpg and videos is currently supported");
+                            }
+                            using (Stream jpegStreamIn = File.Open(file.FullImagePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+                            {
+                                try
                                 {
-                                    MessageBox.Show("Only jpg and videos is currently supported");
-                                }
-                                using (Stream jpegStreamIn = File.Open(file.FullImagePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
-                                {
-                                    try
+                                    BitmapDecoder decoder = new JpegBitmapDecoder(jpegStreamIn, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+
+                                    var bitmapFrame = decoder.Frames[0];
+
+                                    if (bitmapFrame != null)
                                     {
-                                        BitmapDecoder decoder = new JpegBitmapDecoder(jpegStreamIn, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
-
-                                        var bitmapFrame = decoder.Frames[0];
-
-                                        if (bitmapFrame != null)
+                                        var writer = bitmapFrame.CreateInPlaceBitmapMetadataWriter();
+                                        if (writer != null)
                                         {
-                                            var writer = bitmapFrame.CreateInPlaceBitmapMetadataWriter();
-                                            if (writer != null)
+                                            writer.SetQuery("/app1/ifd/exif:{uint=306}", "2001:01:01 01:01:01");
+                                            if (!writer.TrySave())
                                             {
-                                                writer.SetQuery("/app1/ifd/exif:{uint=306}", "2001:01:01 01:01:01");
-                                                if (!writer.TrySave())
+                                                if (bitmapFrame.Metadata != null)
                                                 {
-                                                    if (bitmapFrame.Metadata != null)
+                                                    var metaData = (BitmapMetadata)bitmapFrame.Metadata.Clone();
                                                     {
-                                                        var metaData = (BitmapMetadata)bitmapFrame.Metadata.Clone();
+                                                        // Change DateTaken                                   2001:01:01 01:01:01
+                                                        metaData.SetQuery("/app1/ifd/exif/subifd:{uint=36867}", timeString);
+
+                                                        jpegStreamIn.Close();
+
+                                                        var encoder = new JpegBitmapEncoder();
+                                                        encoder.Frames.Add(BitmapFrame.Create(bitmapFrame, bitmapFrame.Thumbnail, metaData, bitmapFrame.ColorContexts));
+
+                                                        using (Stream jpegStreamOut = File.Open(file.FullImagePath, FileMode.Create, FileAccess.Write))
                                                         {
-                                                            // Change DateTaken                                   2001:01:01 01:01:01
-                                                            metaData.SetQuery("/app1/ifd/exif/subifd:{uint=36867}", timeString);
-
-                                                            jpegStreamIn.Close();
-
-                                                            var encoder = new JpegBitmapEncoder();
-                                                            encoder.Frames.Add(BitmapFrame.Create(bitmapFrame, bitmapFrame.Thumbnail, metaData, bitmapFrame.ColorContexts));
-
-                                                            using (Stream jpegStreamOut = File.Open(file.FullImagePath, FileMode.Create, FileAccess.Write))
-                                                            {
-                                                                encoder.Save(jpegStreamOut);
-                                                                jpegStreamOut.Close();
-                                                            }
+                                                            encoder.Save(jpegStreamOut);
+                                                            jpegStreamOut.Close();
                                                         }
                                                     }
                                                 }
                                             }
                                         }
                                     }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBox.Show(ex.Message);
-                                    }
-
                                 }
-                            
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show(ex.Message);
+                                }
+
+                            }
+
                         }
                         break;
                     case FileProperties.FileTypes.Video:
-                        File.SetLastWriteTime(file.FullImagePath, chosenTime);
-                        File.SetCreationTime(file.FullImagePath, chosenTime);
-                        File.SetLastAccessTime(file.FullImagePath, chosenTime);
+                        File.SetLastWriteTime(file.FullImagePath, chosenTime.AddHours(15));
+                        File.SetCreationTime(file.FullImagePath, chosenTime.AddHours(15));
+                        File.SetLastAccessTime(file.FullImagePath, chosenTime.AddHours(15));
                         break;
                 }
 
