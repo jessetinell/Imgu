@@ -224,32 +224,17 @@ namespace Imgu.Menu
                 Directory.CreateDirectory(whatEver);
             }
 
-            //Om dag finns, kopiera in fil
-            if (Directory.Exists(whatEver))
-            {
-                file.FileName = Path.GetFileName(file.FileName);
-                if (file.FileName != null) whatEver = Path.Combine(whatEver, file.FileName);
-                File.Copy(file.FullImagePath, whatEver, true);
-            }
+            file.FileName = Path.GetFileName(file.FileName);
+            if (file.FileName != null) whatEver = Path.Combine(whatEver, file.FileName);
+            File.Copy(file.FullImagePath, whatEver, true);
         }
+
         void CopyFiles(FileProperties file)
         {
             var targetYear = TargetFolder + "\\" + file.DateTaken.Year;
             var month = file.DateTaken.ToString("MMMM").UppercaseFirst();
             var monthNumber = file.DateTaken.Month.ToString(CultureInfo.InvariantCulture);
             var targetMonth = targetYear + "\\" + monthNumber + ". " + month;
-            string targetDay;
-
-            //For images taken on late nights ex. on a party. Copies the image to the same day as the party started.
-            if (file.DateTaken.Hour < 4 && file.DateTaken.Day != 1)
-            {
-                int lateNight = file.DateTaken.Day - 1;
-                targetDay = targetMonth + "\\" + lateNight;
-            }
-            else
-            {
-                targetDay = targetMonth + "\\" + file.DateTaken.Day;
-            }
 
             //Om ÅR inte finns
             if (!Directory.Exists(targetYear))
@@ -263,19 +248,39 @@ namespace Imgu.Menu
                 Directory.CreateDirectory(targetMonth);
             }
 
-            //om DAG inte finns, skapa mappen
-            if (!Directory.Exists(targetDay))
+            var filesThisDay = _theImages.Count(i => i.DateTaken.Year == file.DateTaken.Year && i.DateTaken.Month == file.DateTaken.Month && i.DateTaken.Day == file.DateTaken.Day);
+            if (filesThisDay > 20)
             {
-                Directory.CreateDirectory(targetDay);
-            }
+                string targetDay;
 
-            //Om dag finns, kopiera in fil
-            if (Directory.Exists(targetDay))
-            {
+                //For images taken on late nights ex. on a party. Copies the image to the same day as the party started.
+                if (file.DateTaken.Hour < 4 && file.DateTaken.Day != 1)
+                {
+                    var lateNight = file.DateTaken.Day - 1;
+                    targetDay = targetMonth + "\\" + lateNight;
+                }
+                else
+                {
+                    targetDay = targetMonth + "\\" + file.DateTaken.Day;
+                }
+
+                //om DAG inte finns, skapa mappen
+                if (!Directory.Exists(targetDay))
+                {
+                    Directory.CreateDirectory(targetDay);
+                }
+
                 file.FileName = Path.GetFileName(file.FullImagePath);
                 if (file.FileName != null) targetDay = Path.Combine(targetDay, file.FileName);
                 File.Copy(file.FullImagePath, targetDay, true);
             }
+            else
+            {
+                file.FileName = Path.GetFileName(file.FullImagePath);
+                if (file.FileName != null) targetMonth = Path.Combine(targetMonth, file.FileName);
+                File.Copy(file.FullImagePath, targetMonth, true);
+            }
+
         }
         #endregion
 
